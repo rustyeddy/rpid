@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from flask import Flask
 from flask import render_template
 from flask import Response
@@ -35,6 +35,21 @@ def display():
 def control(control_name):
     control_queue.put(control_name)
     return Response('queued')
+
+@app.route('/motor/<direction>/<throttle>')
+def motor_throttle(direction, throttle):
+    """Set the direction and throttle for the mobile.  Direction parameter
+    is a 360 deg rotation from the current 'forward orientation'"""
+    if direction == "forward":
+        forward(throttle)
+    elif direction == "reverse":
+        reverse(throttle)
+    elif direction == "right":
+        right(throttle)
+    elif direction == "left":
+        left(throttle)
+    else:
+        print("Don't know what to do with " . direction)
 
 
 import time
