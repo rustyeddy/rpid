@@ -7,8 +7,6 @@
 
 # This assumes the Left motor is on Motor 1 and the Right motor is on Motor 2
 
-
-
 import time
 import atexit
 from adafruit_motorkit import MotorKit
