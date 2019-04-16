@@ -6,8 +6,8 @@ from flask import Response
 from multiprocessing import Process
 from multiprocessing import Queue
 
-from cam import controlled_image_server_behavior
-from cam import frame_generator
+# from cam import controlled_image_server_behavior
+# from cam import frame_generator
 
 import time
 
@@ -22,6 +22,7 @@ def index():
 def hello_world():
     return render_template('index.html')
 
+""
 @app.route("/image")
 def image_server():
     return render_template('image_server.html')
@@ -35,6 +36,7 @@ def display():
 def control(control_name):
     control_queue.put(control_name)
     return Response('queued')
+""
 
 @app.route('/motor/<direction>/<throttle>')
 def motor_throttle(direction, throttle):
@@ -65,9 +67,3 @@ def start_server_process(template_name):
 
 # app.run(host="0.0.0.0", debug=True, port=5001)
 # process = start_server_process('control_image_behavior.html')
-process = start_server_process('control_track_behavior.html')
-try:
-    controlled_image_server_behavior()
-finally:
-    process.terminate()
-

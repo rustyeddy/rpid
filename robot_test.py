@@ -4,7 +4,7 @@
 import time
 
 # Import the Robot.py file (must be in the same directory as this file!).
-import Robot
+import TurtleCar
 
 
 # Set the trim offset for each motor (left and right).  This is a value that
@@ -24,7 +24,7 @@ RIGHT_TRIM = 0
 
 # Create an instance of the robot with the specified trim values.
 
-robot = Robot.Robot(left_trim=LEFT_TRIM, right_trim=RIGHT_TRIM)
+robot = Motor.TurtleCar()
 
 # Now move the robot around!
 # Each call below takes two parameters:
