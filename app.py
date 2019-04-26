@@ -22,6 +22,11 @@ def index():
 def hello_world():
     return render_template('index.html')
 
+@app.route('/snap')
+def snap_shot():
+    ## TODO: take snapshot here
+    return render_template('snap_shot.html')
+
 @app.route("/image")
 def image_server():
     return render_template('image_server.html')
