@@ -1,5 +1,6 @@
 from time import sleep
 from picamera import PiCamera
+from fractions import Fraction
 
 resolution_large = (1024, 768)
 resolution_small = (320, 240)
@@ -51,14 +52,32 @@ def snap(camera, fname='/tmp/snap.jpg', delay=2):
     sleep(delay)
     camera.capture(fname)
 
-def sequence(camera):
+def sequence(camera, tmpl="/tmp/image%02d.jpg", count=10):
     """Take a sequence of images and save in /tmp/image0x.jpg"""
     # Finally, take several photos with the fixed settings
     camera.capture_sequence(['/tmp/image%02d.jpg' % i for i in range(10)])
 
+def time_lapse(camera):
+    camera.start_preview()
+    sleep(2)
+    for filename in camera.capture_continuous('/tmp/img{counter:03d}.jpg'):
+        print("    caputred %s" % filename)
+        sleep(300)
+
+def low_light(camera):
+    """Set before take pictures or recording video in low light"""
+    camera.framerate=Fraction(1, 6)
+    camera.sensor_mode = 3
+    camera.shutter_speed = 60000000
+    camera.iso = 800
+
+    # Give the camera a nice long time to set gains and measure
+    # AWB (AWS could be fixed here instead)
+    print("    low light - sleep for 30 seconds ")
+    sleep(30)
+    camera.exposure_mode = "off"
 
 if __name__ == "__main__":
-
     fname="/tmp/snap.jpg"
     delay=2
 
@@ -69,6 +88,15 @@ if __name__ == "__main__":
     snap(camera, fname, delay)
 
     print("  take a sequence and save the sequence to /tmp/image0x.jpg")
-    sequence(camera)
+    sequence(camera, "/tmp/image02d.jpg", 10)
+
+    print("  now set low light before capturing a new image")
+    low_light(camera)
+
+    print("  take a snapshot in low light mode, with 6s exposure ")
+    snap(camera, "/tmp/low-light.jpg")
+
+    print("  now start the time lapse")
+    time_lapse(camera)
 
     print("done.")
