@@ -12,16 +12,12 @@ def do_cmd(car, cmd):
     speed = car.speed
     if cmd == "h":
         car.left()
-        move = True
     elif cmd == "j":
         car.forward()
-        move = True
     elif cmd == "k":
         car.backward()
-        move = True        
     elif cmd == "l":
         car.right()
-        move = True
     elif cmd == "+":
         car.speed = speed + 10
     elif cmd == "-":
@@ -68,6 +64,9 @@ if __name__ == "__main__":
     car = SkidSteer()
     car.speed = .4
     
+    # Start looping waiting for and reading commands, the 
+    # cmd we have is totally independant of the car the 
+    # command will be applied to.
     while True:
         print("prompt~> ")
         cmd = get_cmd()
