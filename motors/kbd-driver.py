@@ -3,6 +3,7 @@ from motor import SkidSteer
 import sys, tty, termios
 
 def read_stdin():
+    ## Can we add an mqtt task here also?
     readline = sys.stdin.readline()
     while readline:
         yield readline
