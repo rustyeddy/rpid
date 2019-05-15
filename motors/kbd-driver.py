@@ -8,19 +8,6 @@ def read_stdin():
         yield readline
         readline = sys.stdin.readline()
 
-def read_mqtt():
-    message = mqtt.read_message("sensors/joy")
-
-    # parse the joystick command
-    cmds = "".split(":")
-    if len(cmds) < 1:
-        next
-    if cmds[0] == "joy":
-        print("We have a joystick command!")
-    else:
-        print("Unkown command " + cmds[0])
-    # Parse joystick the send a command to the car controller
-
 def do_cmd(car, cmd):
     speed = car.speed
     if cmd == "h":
