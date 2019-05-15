@@ -1,19 +1,16 @@
-def Stop():
-    """Stop all motors incase we our motor kit has crashed and the program
-    has exited.  In our case fake_motorkit, we do nothing"""
-    pass
-    
 class Motor:
     """This motor does nothing.  Speed is a number between 1 and 100
     representing the percentage of power to the motor (resulting in the
     speed the motor turns)"""
     def __init__(self, name):
         self._name = name
-        self._speed = 0 
+        self._throttle = 0
 
-    @property
-    def throttle(self, speed):
-        self._speed = speed
+    def throttle(self):
+        return self._throttle
+
+    def throttle(self, value):
+        self._throttle = value
     
 
 ## Incase adafruit does not exist
@@ -25,11 +22,11 @@ class MotorKit:
 
     """
     def __init__(self, address=0x60, i2c=None):
-        self._motor1 = Motor("motor1")
-        self._motor2 = Motor("motor2")
-        self._motor3 = Motor("motor3")
-        self._motor4 = Motor("motor4")
-        self._motors = [ self._motor1, self._motor2, self._motor3, self._motor4 ]
+        self.motor1 = Motor("motor1")
+        self.motor2 = Motor("motor2")
+        self.motor3 = Motor("motor3")
+        self.motor4 = Motor("motor4")
+        self.motors = [ self.motor1, self.motor2, self.motor3, self.motor4 ]
 
     def motors(self):
         return self._motors
@@ -37,21 +34,21 @@ class MotorKit:
 class Skid:
     def __init__(self, wheels=2):
         self._wheel_count = wheels
-        self._left_speed = 0
-        self._right_speed = 0
+        self._left_throttle = 0.0
+        self._right_throttle = 0.0
 
         ## Ignore i2c since we are faking the hardware
         def left(self, speed=None):
             if speed:
-                self._left_speed = speed
-            return self._left_speed
+                self._left_throttle = speed
+            return self._left_throttle
 
         ## Ignore i2c since we are faking the hardware
         def right(self, speed=None):
             if speed:
-                self._right_speed = speed
-            return self._right_speed
+                self._right_throttle = speed
+            return self._right_throttle
 
         def stop(self):
-            self.left(0)
-            self.right(0)
+            self.left(0.0)
+            self.right(0.0)

@@ -9,7 +9,7 @@
 ## 4. Turn is performed by one side turning faster than the other side
 ## 
 ## With that, the skid API will expose a very simple fundamental API,
-## left_speed and right_speed.  I will add stop and coast for convienince.
+## left_throttle and right_throttle.  I will add stop and coast for convienince.
 ##
 ## If we are running on a Raspberry Pi with the Adafruit Motorkit
 ## installed we will use that to drive the motors.  If the Adafruit
@@ -22,83 +22,100 @@
 ## just have to assume the Motor driver does it's job and control the
 ## motors.
 ##
+import atexit
+from pprint import pprint
+
 try:
     from adafruit_motorkit import MotorKit
 except:
     from fake_motorkit import MotorKit
 
+def Stop():
+    """Stop all motors incase we our motor kit has crashed and the program
+    has exited.  In our case fake_motorkit, we do nothing"""
+    skid = MotorKit()
+    skid.motor1.threshold = 0.0
+    skid.motor2.threshold = 0.0
+    skid.motor3.threshold = 0.0
+    skid.motor4.threshold = 0.0
+    
 class SkidSteer:
-   """This class assumes two powered motors (or motor groups) that oppose
+    """This class assumes two powered motors (or motor groups) that oppose
     each other to form a right and left side of the vehical, which
     also presumes a front and rear.
-
     """
-    def __init__(self, wheels=2):
-       self._wheel_count = wheels
-       self._left_trim = 0
-       self._right_trim = 0
-       self._stop_at_exit = True
-       self._motors = MotorKit()
+    def __init__(self, name="skid", wheels=2):
+        self._name = name
+        self._wheel_count = wheels
+        self._left_trim = 0
+        self._right_trim = 0
+        self._stop_at_exit = True
 
-       ## pseudo private
-       self._left_speed = 0
-       self._right_speed = 0
+        self._motors = MotorKit()
+        self._left_throttle = 0
+        self._right_throttle = 0
+        if self._wheel_count == 2:
+            self.left_motors      = [ self._motors.motor1 ]
+            self.right_motors     = [ self._motors.motor2 ]
+        elif self._wheel_count == 4:
+            self.left_motors       = [ self._motors.motor1, self._motors.motor3 ]
+            self.right_motors      = [ self._motors.motor2, self._motors.motor4 ]
+            
+        if self._stop_at_exit:
+            atexit.register(Stop)
 
-       if self._wheel_count == 2:
-          self.left_motors      = [ self._motors.motor1 ]
-          self.right_motors     = [ self._motors.motor2 ]
-       else if self._wheel_count == 4:
-          self.left_motors       = [ self._motors.motor1 self._motors.motor3 ]
-          self.right_motors      = [ self._motors.motor2 self._motors.motor4 ]
-
-       if self._stop_at_exit:
-          atexit.register(Stop)
-       
-    def left_speed(self, speed):
-        """Set the speed of the left motor, taking into account its trim
-        offset.  _left_speed and _right_speed have been converted into
+    @property        
+    def throttle(self, throttle):
+        self._left_throttle = throttle
+        self._right_throttle = throttle
+        
+    def left_throttle(self, throttle):
+        """Set the throttle of the left motor, taking into account its trim
+        offset.  _left_throttle and _right_throttle have been converted into
         groups such that each motor in a group will have the motor set
-        to the same speed.  This applies to 4wd, 6wd, etc. as well as
+        to the same throttle.  This applies to 4wd, 6wd, etc. as well as
         tracked vehicals with more than one motor like a tank.
         """
-        assert -1 <= speed <= 1, 'Speed must be a value between -1 to 1 inclusive!'
-        speed += self._left_trim
-        speed = max(-1, min(1, speed))  # Constrain speed -1 <= x <= 1
+        assert -1.0 <= throttle <= 1.0, 'Throttle must be a value between -1 to 1 inclusive!'
+        throttle += self._left_trim
+        throttle = max(-1, min(1, throttle))
 
         for m in self.left_motors:
-            m.throttle = speed
-            m._left_speed = speed
-        
-    def right_speed(self, speed):
-        """Set the speed of the right motor, taking into account its trim
+            m.throttle(throttle)
+            
+    def right_throttle(self, throttle):
+        """Set the throttle of the right motor, taking into account its trim
         offset.
         """
-        assert -1 <= speed <= 1, 'Speed must be a value between -1 to 1 inclusive!'
-        speed += self._right_trim
-        speed = max(-1, min(1, speed))  # Constrain speed to 0-255 after trimming.
+        assert -1.0 <= throttle <= 1.0, 'Throttle must be a value between -1 to 1 inclusive!'
+        throttle += self._right_trim
+        throttle = max(-1, min(1, throttle))
 
         for m in self.right_motors:
-           m._right_speed = speed
-           m.throttle = speed
+            pprint(throttle)
+            m.throttle(throttle)
 
-    def forward(self, speed):
-        self.right_speed(speed)
-        self.left_speed(speed)
-        return speed
+    def forward(self, throttle):
+        self.right(throttle)
+        self.left(throttle)
+        return throttle
 
-    def backward(self, speed):
-        speed *= -1
-        self.right_speed(speed)
-        self.left_speed(speed)
-        return speed
+    def backward(self, throttle):
+        throttle *= -1.0
+        self.right_throttle(throttle)
+        self.left_throttle(throttle)
+        return throttle
 
-    def right(self, speed):
-        self.left_speed(speed)
-        self.right_speed(speed * -1)
-        return speed
+    def right(self, throttle):
+        self.left_throttle(throttle)
+        self.right_throttle(throttle * -1.0)
+        return throttle
 
-    def left(self, speed):
-        self.left_speed(speed * -1)
-        self.right_speed(speed)
-        return speed
+    def left(self, throttle):
+        self.left_throttle(throttle * -1.0)
+        self.right_throttle(throttle)
+        return throttle
 
+    def string(self):
+        return "skidder: " + self._name
+    
