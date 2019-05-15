@@ -1,4 +1,4 @@
-from motor import SkidSteer
+from motors.motor import SkidSteer
 import paho.mqtt.client as mqtt
 from pprint import pprint
 
