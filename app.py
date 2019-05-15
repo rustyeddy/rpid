@@ -6,9 +6,10 @@ from flask import Response
 from multiprocessing import Process
 from multiprocessing import Queue
 
+from motor import SkidSteer
+
 # from cam import controlled_image_server_behavior
 # from cam import frame_generator
-
 import time
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ def index():
 def hello_world():
     return render_template('index.html')
 
-@app.route('/snap')
+@app.route('/camera/snap')
 def snap_shot():
     ## TODO: take snapshot here
     return render_template('snap_shot.html')
@@ -36,26 +37,20 @@ def display():
     return Response(frame_generator(),
             mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/control/<control_name>')
-def control(control_name):
-    control_queue.put(control_name)
-    return Response('queued')
-""
+@app.route('/skid/<left>/<right>')
+def motor_throttle(lspeed, rspeed):
+    """Set the direction and throttle for the motors, we are 
+    employing skidsteer so our speed and steering are controlled
+    by the speed and direction of the left and right motors.
+    Speed is represented by a percentage between 0 and 1, the
+    direction is represented with a positive or negative value. 
+    """
 
-@app.route('/motor/<direction>/<throttle>')
-def motor_throttle(direction, throttle):
-    """Set the direction and throttle for the mobile.  Direction parameter
-    is a 360 deg rotation from the current 'forward orientation'"""
-    if direction == "forward":
-        forward(throttle)
-    elif direction == "reverse":
-        reverse(throttle)
-    elif direction == "right":
-        right(throttle)
-    elif direction == "left":
-        left(throttle)
-    else:
-        print("Don't know what to do with " . direction)
+    if lspeed < -1 or lspeed > 1:
+        return "ERROR: values must be between -1 and +1"
+
+    skid._left_speed(lspeed)
+    skid._right_spee
 
 
 import time

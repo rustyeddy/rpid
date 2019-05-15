@@ -2,19 +2,17 @@ from motor import SkidSteer
 import paho.mqtt.client as mqtt
 from pprint import pprint
 
-
 def on_connect(client, userdata, flags, rc):
     print("Connected with result " + str(rc))
     client.subscribe("mot")
 
 def on_message(client, userdata, msg):
-    car._left_speed(.7)
-    car._right_speed(.7)
+    """Expect messages parameters as numbers 0-100 as a percentage
+    of the motor speed."""
     print(msg.topic + " " + str(msg.payload))
-    print("Hello, cmds")
+    print("INFO: recieved a new motor control message  ")
 
     msgstr = msg.payload
-    
     cmds = msgstr.split(':')
     print("Commands have ... ")
     print(len(cmds))
