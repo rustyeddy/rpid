@@ -39,7 +39,7 @@ class SkidSteer:
             atexit.register(Stop)
 
 
-    def _left_speed(self, speed):
+    def left_speed(self, speed):
         """Set the speed of the left motor, taking into account its trim
         offset.  _left_speed and _right_speed have been converted into
         groups such that each motor in a group will have the motor set
@@ -54,7 +54,7 @@ class SkidSteer:
         for m in self.leftMotors:
             m.throttle = speed
 
-    def _right_speed(self, speed):
+    def right_speed(self, speed):
         """Set the speed of the right motor, taking into account its trim
         offset.
 
