@@ -24,23 +24,28 @@ def get_cmd():
 
 def do_cmd(car, cmd):
     speed = car._left_throttle
+    left = 0
+    right = 0
+
     if cmd == "h":
-        car.left(speed)
+        right = speed 
+        left = speed * -1
     elif cmd == "j":
-        car.forward(speed)
+        left = speed
+        right = speed
     elif cmd == "k":
-        car.backward(speed)
+        left = speed * -1
+        right = speed * -1
     elif cmd == "l":
-        car.right(speed)
+        left = speed
+        right = speed * -1
+
     elif cmd == "f":
-        if car._left_throttle < 1.0:
-            car._left_throttle += 0.1
-            car._right_throttle = car._left_throttle
-            
+        if speed < 1.0:
+            speed = speed + .1
     elif cmd == "s":
-        if car._left_throttle > 0.0:
-            car._left_throttle -= 0.1
-            car._right_throttle = car._left_throttle
+        if speed > 0:
+            speed = speed - .1
 
     elif cmd == "q":
         print("Goodbye ...")
@@ -48,18 +53,16 @@ def do_cmd(car, cmd):
 
     else:
         print("Do not know what to do with cmd " + cmd)
+        return
 
-    print("left " + str(car._left_throttle) + " right " + str(car._right_throttle))
+    print("left " + left + " right " + right)
+    kit.motor1.throttle = left
+    kit.motor2.throttle = right
     return
 
 if __name__ == "__main__":
 
     # create an instance of our skidder
-    skidder = SkidSteer("skid", 2)
-    
-    # Start looping waiting for and reading commands, the 
-    # cmd we have is totally independant of the car the 
-    # command will be applied to.
     while True:
         print("prompt~> ")
         cmd = get_cmd()

@@ -4,14 +4,7 @@ class Motor:
     speed the motor turns)"""
     def __init__(self, name):
         self._name = name
-        self._throttle = 0
-
-    def throttle(self):
-        return self._throttle
-
-    def throttle(self, value):
-        self._throttle = value
-    
+        self.throttle = 0
 
 ## Incase adafruit does not exist
 class MotorKit:
@@ -31,24 +24,3 @@ class MotorKit:
     def motors(self):
         return self._motors
 
-class Skid:
-    def __init__(self, wheels=2):
-        self._wheel_count = wheels
-        self._left_throttle = 0.0
-        self._right_throttle = 0.0
-
-        ## Ignore i2c since we are faking the hardware
-        def left(self, speed=None):
-            if speed:
-                self._left_throttle = speed
-            return self._left_throttle
-
-        ## Ignore i2c since we are faking the hardware
-        def right(self, speed=None):
-            if speed:
-                self._right_throttle = speed
-            return self._right_throttle
-
-        def stop(self):
-            self.left(0.0)
-            self.right(0.0)
