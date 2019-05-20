@@ -75,7 +75,6 @@ class Skidder:
         assert -1.0 <= left <= 1.0
         self.set_throttle(left, right)
         
-
 if __name__ == "__main__":
 
     skid = Skidder()

@@ -5,7 +5,8 @@ import struct
 from PIL import Image
 
 server_socket = socket.socket()
-server_socket.bind('0.0.0.0', 8000)
+#server_socket.bind('0.0.0.0', 8000)
+server_socket.bind(('0.0.0.0', 8000))
 server_socket.listen(0)
 
 connection = server_socket.accept()[0].makefile('rb')

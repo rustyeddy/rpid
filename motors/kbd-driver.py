@@ -1,4 +1,4 @@
-from motor import SkidSteer
+from motor import Skidder
 
 import sys, tty, termios
 
