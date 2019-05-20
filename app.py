@@ -3,6 +3,8 @@ from flask import Flask
 from flask import render_template
 from flask import Response
 
+from flask_bootstrap import Bootstrap
+
 from multiprocessing import Process
 from multiprocessing import Queue
 
@@ -13,6 +15,7 @@ from multiprocessing import Queue
 import time
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 @app.route('/')
 def index():
