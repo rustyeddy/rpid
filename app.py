@@ -6,7 +6,7 @@ from flask import Response
 from multiprocessing import Process
 from multiprocessing import Queue
 
-from motor import SkidSteer
+# from motor import Skidder
 
 # from cam import controlled_image_server_behavior
 # from cam import frame_generator
@@ -36,22 +36,6 @@ def image_server():
 def display():
     return Response(frame_generator(),
             mimetype='multipart/x-mixed-replace; boundary=frame')
-
-@app.route('/skid/<left>/<right>')
-def motor_throttle(lspeed, rspeed):
-    """Set the direction and throttle for the motors, we are 
-    employing skidsteer so our speed and steering are controlled
-    by the speed and direction of the left and right motors.
-    Speed is represented by a percentage between 0 and 1, the
-    direction is represented with a positive or negative value. 
-    """
-
-    if lspeed < -1 or lspeed > 1:
-        return "ERROR: values must be between -1 and +1"
-
-    skid._left_speed(lspeed)
-    skid._right_spee
-
 
 import time
 def start_server_process(template_name):
