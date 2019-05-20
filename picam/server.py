@@ -21,11 +21,14 @@ try:
         image_stream.write(connection.read(image_len))
 
         image_stream.seek(0)
-        image = Image.open(image_stream)
 
-        print('Image is %dx%d' % image.size)
-        image.verify()
-        print("Image is verified")
+        # Add open CV right here
+        # 
+        # image = Image.open(image_stream)
+        # print('Image is %dx%d' % image.size)
+        # image.verify()
+        # print("Image is verified")
+        # 
 finally:
 
     connection.close()
