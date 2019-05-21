@@ -70,11 +70,11 @@ def receiver(group):
         mreq = group_bin + struct.pack('@I', 0)
         s.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
 
-    # Loop, printing any data we receive
+    # Loop, printing any data we receive -- TODO make this binary data
     while True:
         data, sender = s.recvfrom(1500)
-        while data[-1:] == '\0': data = data[:-1] # Strip trailing \0's
-        print (str(sender) + '  ' + repr(data))
+        l = len(data)
+        print (str(sender) + ' sent data bytes: ' + str(l))
 
 
 if __name__ == '__main__':
