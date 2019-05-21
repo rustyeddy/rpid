@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 env
 *.jpg
+*.h264
+*.png
 
 # C extensions
 *.so
