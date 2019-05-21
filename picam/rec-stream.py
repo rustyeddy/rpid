@@ -8,7 +8,9 @@ server_socket.bind(('0.0.0.0', 8000))
 server_socket.listen(0)
 
 # Accept a single connection and make a file-like object out of it
+print("Waiting for connection")
 connection = server_socket.accept()[0].makefile('rb')
+print("     got connection")
 try:
     # Run a viewer with an appropriate command line. Uncomment the mplayer
     # version if you would prefer to use mplayer instead of VLC

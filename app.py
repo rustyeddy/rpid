@@ -51,5 +51,5 @@ def start_server_process(template_name):
     server.start()
     return server
 
-# app.run(host="0.0.0.0", debug=True, port=5001)
+app.run(host="0.0.0.0", debug=True, port=5001)
 # process = start_server_process('control_image_behavior.html')
