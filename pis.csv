@@ -1,0 +1,3 @@
+name, ip, mac, comments
+rpi4, 10.24.2.10, , camera
+rpi3, 10.24.2.13, , touch screen
